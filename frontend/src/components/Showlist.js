@@ -7,7 +7,6 @@ import Search from "./Search";
 
 const port = 7000;
 
-
 const Showlist = () => {
   const [properties, setProperties] = useState([]);
   const [token, setToken] = useState("");
@@ -15,6 +14,7 @@ const Showlist = () => {
 
   const [showUpdate, setShowUpdate] = useState(false);
   const [currentPropertyId, setCurrentPropertyId] = useState("");
+  const userToken = localStorage.getItem("token");
 
   useEffect(() => {
     fetchProperties();
@@ -24,23 +24,17 @@ const Showlist = () => {
 
   const fetchProperties = async () => {
     try {
+      if (!userToken) {
+        return;
+      }
       const response = await fetch(
         `http://localhost:${port}/property/showproperty`
       );
       const data = await response.json();
 
       if (response.status >= 400 || !data) {
-        toast.error("Failed to fetch properties", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }else {
+        return;
+      } else {
         setProperties(data);
       }
     } catch (error) {
@@ -60,15 +54,15 @@ const Showlist = () => {
 
   const handleSearch = (filteredProperties) => {
     if (filteredProperties.length === 0) {
-      toast.info('No properties matched your search criteria', {
-        position: 'top-right',
+      toast.info("No properties matched your search criteria", {
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'colored',
+        theme: "colored",
       });
     }
     setFilteredProperties(filteredProperties);
@@ -86,10 +80,9 @@ const Showlist = () => {
         <h2 className="text-3xl text-blue-700 font-bold text-center mb-4">
           Property List
         </h2>
-   
+
         <Search onSearch={handleSearch} />
         <div className="grid lg:grid-cols-4 w-[98%] ml-2 sm:grid-cols-1 gap-4">
-          
           {filteredProperties && filteredProperties.length > 0
             ? filteredProperties.map((property) => (
                 <Link key={property._id} to={`/property/${property._id}`}>

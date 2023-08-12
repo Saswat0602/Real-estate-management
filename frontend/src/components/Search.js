@@ -7,12 +7,16 @@ const Search = ({ onSearch }) => {
   const [filter3Value, setFilter3Value] = useState("");
   const [search, setSearch] = useState("");
 
+  const token = localStorage.getItem("token");
   useEffect(() => {
     handleSearch();
   }, [filter1Value, filter2Value, filter3Value]);
 
   const handleSearch = async () => {
     try {
+      if (!token) {
+        return;
+      }
       const queryParams = new URLSearchParams({
         price: filter1Value,
         location: filter2Value,
@@ -23,16 +27,7 @@ const Search = ({ onSearch }) => {
 
       const response = await fetch(url);
       if (response.status >= 400) {
-        toast.warn("No property match your querry", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        return;
       }
       const data = await response.json();
       onSearch(data);
@@ -52,7 +47,6 @@ const Search = ({ onSearch }) => {
   };
 
   const searchName = async () => {
-  
     try {
       const queryParams = new URLSearchParams({
         q: search,
@@ -141,7 +135,7 @@ const Search = ({ onSearch }) => {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              searchName()
+              searchName();
             }}
             name="searchInput"
           />

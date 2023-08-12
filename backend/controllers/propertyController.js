@@ -33,7 +33,7 @@ const addProperty = async (req, res) => {
       name,
       description,
       location,
-      picture: { url: req.file.path, filename: req.file.filename }, // Store the single image details in an object
+      picture: { url: req.file.path, filename: req.file.filename }, 
       price,
       author: req.user._id,
       type,
@@ -67,8 +67,7 @@ const showProperties = async (req, res) => {
     }
 
     if (q) {
-      // Use regex to search properties based on the q query
-      const searchRegex = new RegExp(q, "i"); // Case-insensitive regex
+      const searchRegex = new RegExp(q, "i"); 
       filter.$or = [
         { name: searchRegex },
         { type: searchRegex },
