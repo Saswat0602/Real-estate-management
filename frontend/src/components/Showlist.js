@@ -10,10 +10,11 @@ const port = 7000;
 const Showlist = () => {
   const [properties, setProperties] = useState([]);
   const [token, setToken] = useState("");
+  console.log(token)
   const [filteredProperties, setFilteredProperties] = useState([]);
 
   const [showUpdate, setShowUpdate] = useState(false);
-  const [currentPropertyId, setCurrentPropertyId] = useState("");
+  const [currentPropertyId] = useState("");
   const userToken = localStorage.getItem("token");
 
   useEffect(() => {
