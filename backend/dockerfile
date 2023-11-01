@@ -1,0 +1,17 @@
+# Use an official Node.js Alpine-based image
+FROM node:14-alpine
+
+# Create a working directory for your application inside the container
+WORKDIR /app
+
+# Copy your application code and configuration files into the container
+COPY . .
+
+# Install your application dependencies
+RUN npm install
+
+# Expose the port your Node.js application is listening on (change as needed)
+EXPOSE 7000
+
+# Command to start your Node.js application
+CMD ["node", "index.js"]
